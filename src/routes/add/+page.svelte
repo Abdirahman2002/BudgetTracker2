@@ -1,0 +1,48 @@
+<script>
+  let { data, form } = $props();
+</script>
+
+<a href="/" class="btn btn-outline-secondary btn-sm mb-3">
+  <i class="bi bi-arrow-left"></i> Back
+</a>
+
+<h1 class="mb-4">Add a Transaction</h1>
+
+{#if form?.error}
+  <div class="alert alert-danger" role="alert">{form.error}</div>
+{/if}
+{#if form?.success}
+  <div class="alert alert-success" role="alert">Transaktion gespeichert.</div>
+{/if}
+
+<div class="card">
+  <div class="card-body">
+    <form method="POST" action="?/create">
+      <div class="mb-3">
+        <label for="amount" class="form-label">Amount (CHF)</label>
+        <input id="amount" name="amount" class="form-control" type="number" step="0.01" min="0.01" required />
+        <div class="form-text">Betrag in CHF, z. B. 12.50</div>
+      </div>
+      <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select id="category" name="categoryId" class="form-select" required>
+          <option value="">— wählen —</option>
+          {#each data.categories as c}
+            <option value={c._id}>{c.name}</option>
+          {/each}
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="date" class="form-label">Date</label>
+        <input id="date" name="date" class="form-control" type="date" required />
+      </div>
+      <div class="mb-3">
+        <label for="note" class="form-label">Note</label>
+        <input id="note" name="note" class="form-control" type="text" placeholder="z. B. Coop Mittagessen" />
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-lg"></i> Add Transaction
+      </button>
+    </form>
+  </div>
+</div>

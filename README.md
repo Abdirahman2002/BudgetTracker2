@@ -384,6 +384,25 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Referenz:** Screenshot in Kap. x.y
 - **Aus Evaluation abgeleitet?:** Ja, Issue x.y
 
+### 4.2 Benutzerkonten: Registrierung, Login & Logout (Issue #6)
+- **Beschreibung & Nutzen:** Der Prototyp war eine **Single-User-App** — alle Daten lagen ungeschützt in gemeinsamen Collections. Diese Erweiterung führt **echte Benutzerkonten** mit Registrierung, Login und Logout ein. Nutzen: Die App wird mehrbenutzerfähig und schützt persönliche Finanzdaten hinter einer Authentifizierung. Abgrenzung zum Mindestumfang: Der Übungsumfang verlangt nur Erfassen/Bearbeiten von Daten ohne Authentifizierung; Benutzerkonten gehen klar darüber hinaus.
+- **Wo umgesetzt:**
+  - **Frontend:** Anmelde- und Registrierungsseiten (`src/routes/login/+page.svelte`, `src/routes/register/+page.svelte`); Logout-Button mit E-Mail-Anzeige in der Navigation (`src/routes/+layout.svelte`), nur sichtbar wenn eingeloggt.
+  - **Backend:** Passwortprüfung mit `bcrypt.compare` und Setzen des Session-Cookies (`src/routes/login/+page.server.js`); Registrierung mit `bcrypt.hash` (Faktor 10), Dubletten-Prüfung und Anlegen von Standard-Kategorien (`src/routes/register/+page.server.js`); Logout via Cookie-Löschung (`src/routes/logout/+server.js`). Eine **Request-Hook** liest bei jedem Aufruf das Session-Cookie und hängt den User an `event.locals` (`src/hooks.server.js`); ein **Auth-Gate** im Layout leitet nicht eingeloggte Besucher auf `/login` um und eingeloggte von den Auth-Seiten weg (`src/routes/+layout.server.js`).
+  - **Datenbank:** Neue `users`-Collection mit `createUser`, `getUserByEmail`, `getUserById` (`src/lib/db.js`); Passwörter werden nur als bcrypt-Hash gespeichert, nie im Klartext.
+  - **Sicherheit:** Session-Cookie mit `httpOnly`, `sameSite: "strict"` und `secure` nur in Produktion (damit das Login lokal über http funktioniert, in der Produktion aber über https abgesichert ist).
+- **Referenz:** Screenshots der Login-/Registrierungs-Seiten in Kap. _[x.y]_; KI-Deklaration zur Umsetzung in `doc/ki-deklaration-m1.md`.
+- **Aus Evaluation abgeleitet?:** Nein — geplante Funktionserweiterung (Mehrbenutzerfähigkeit) über den Prototyp hinaus, Voraussetzung für #5.
+
+### 4.3 Datentrennung pro Benutzer (Multi-User-Datenschicht, Issue #5)
+- **Beschreibung & Nutzen:** Aufbauend auf #6 wird die **gesamte Datenschicht pro Benutzer getrennt**: Jede Kategorie und jede Transaktion gehört genau einem User, und jede Datenbankabfrage filtert nach dessen `userId`. Nutzen: Benutzer sehen und verändern ausschliesslich ihre **eigenen** Daten — eine echte Daten-Isolation statt eines gemeinsamen Datentopfs. Abgrenzung zum Mindestumfang: Der Prototyp kannte kein `userId`; diese Erweiterung ist die strukturelle Voraussetzung für die Mehrbenutzerfähigkeit.
+- **Wo umgesetzt:**
+  - **Datenbank:** In `src/lib/db.js` erhält **jede** Funktion `userId` als erstes Argument; alle Queries filtern mit `{ userId }`, Lösch- und Update-Operationen enthalten `userId` im Filter (verhindert Zugriff auf fremde Datensätze). Das Löschen einer Kategorie entfernt kaskadierend nur die Transaktionen **desselben** Users.
+  - **Backend:** Alle Server-Routen reichen die `userId` des angemeldeten Users (`locals.user._id`) an die DB-Funktionen durch (`src/routes/+page.server.js`, `add/`, `categories/`, `history/`).
+  - **Frontend:** Keine sichtbare Änderung — die Trennung wirkt vollständig serverseitig.
+- **Referenz:** ER-Diagramm der Datenstruktur in `doc/architecture.mermaid`; Screenshot „zwei Konten sehen getrennte Daten" in Kap. _[x.y]_.
+- **Aus Evaluation abgeleitet?:** Nein — strukturelle Erweiterung, die direkt aus der Einführung der Benutzerkonten (#6) folgt.
+
 ## 5. Projektorganisation [Optional]
 Beispiele:
 - **Repository & Struktur:** _[Link; kurze Strukturübersicht]_  

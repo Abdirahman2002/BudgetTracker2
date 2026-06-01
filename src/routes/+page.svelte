@@ -20,7 +20,7 @@
   }
 </script>
 
-<h1 class="mb-4">Overview</h1>
+<h1 class="mb-4">Übersicht</h1>
 
 <form method="GET" class="mb-4">
   <label for="month-select" class="form-label">Monat</label>
@@ -33,7 +33,7 @@
 
 <div class="card text-center mb-4">
   <div class="card-body py-4">
-    <p class="text-muted mb-1">Total Spending</p>
+    <p class="text-muted mb-1">Gesamtausgaben</p>
     <h2 class="display-5 fw-bold mb-0">
       <Money amount={data.total} />
     </h2>

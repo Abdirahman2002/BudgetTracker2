@@ -13,7 +13,7 @@
 </script>
 
 <h1 class="mb-4">
-  History
+  Verlauf
   <span class="badge text-bg-secondary fs-6 align-middle">{data.transactions.length}</span>
 </h1>
 

@@ -10,5 +10,7 @@
 
 <form method="POST" {action} class="d-inline" onsubmit={handleSubmit}>
   <input type="hidden" name="id" value={id} />
-  <button type="submit" class="btn btn-sm btn-danger">Löschen</button>
+  <button type="submit" class="btn btn-sm btn-outline-danger" aria-label="Löschen" title="Löschen">
+    <i class="bi bi-trash"></i>
+  </button>
 </form>

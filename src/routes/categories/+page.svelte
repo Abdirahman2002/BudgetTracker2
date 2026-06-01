@@ -5,7 +5,7 @@
   let { data, form } = $props();
 </script>
 
-<h1 class="mb-4">Categories</h1>
+<h1 class="mb-4">Kategorien</h1>
 
 {#if form?.error}
   <div class="alert alert-danger" role="alert">{form.error}</div>
@@ -32,7 +32,7 @@
 
 <hr class="my-4" />
 
-<h2 class="h4 mb-3">Add Category</h2>
+<h2 class="h4 mb-3">Kategorie hinzufügen</h2>
 <div class="card">
   <div class="card-body">
     <form method="POST" action="?/create">
@@ -48,7 +48,7 @@
         </div>
       </div>
       <button type="submit" class="btn btn-primary">
-        <i class="bi bi-plus-lg"></i> Add Category
+        <i class="bi bi-plus-lg"></i> Kategorie hinzufügen
       </button>
     </form>
   </div>

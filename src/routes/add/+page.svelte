@@ -3,10 +3,10 @@
 </script>
 
 <a href="/" class="btn btn-outline-secondary btn-sm mb-3">
-  <i class="bi bi-arrow-left"></i> Back
+  <i class="bi bi-arrow-left"></i> Zurück
 </a>
 
-<h1 class="mb-4">Add a Transaction</h1>
+<h1 class="mb-4">Ausgabe erfassen</h1>
 
 {#if form?.error}
   <div class="alert alert-danger" role="alert">{form.error}</div>
@@ -19,12 +19,12 @@
   <div class="card-body">
     <form method="POST" action="?/create">
       <div class="mb-3">
-        <label for="amount" class="form-label">Amount (CHF)</label>
+        <label for="amount" class="form-label">Betrag (CHF)</label>
         <input id="amount" name="amount" class="form-control" type="number" step="0.01" min="0.01" required />
         <div class="form-text">Betrag in CHF, z. B. 12.50</div>
       </div>
       <div class="mb-3">
-        <label for="category" class="form-label">Category</label>
+        <label for="category" class="form-label">Kategorie</label>
         <select id="category" name="categoryId" class="form-select" required>
           <option value="">— wählen —</option>
           {#each data.categories as c}
@@ -33,15 +33,15 @@
         </select>
       </div>
       <div class="mb-3">
-        <label for="date" class="form-label">Date</label>
+        <label for="date" class="form-label">Datum</label>
         <input id="date" name="date" class="form-control" type="date" required />
       </div>
       <div class="mb-3">
-        <label for="note" class="form-label">Note</label>
+        <label for="note" class="form-label">Notiz</label>
         <input id="note" name="note" class="form-control" type="text" placeholder="z. B. Coop Mittagessen" />
       </div>
       <button type="submit" class="btn btn-primary">
-        <i class="bi bi-check-lg"></i> Add Transaction
+        <i class="bi bi-check-lg"></i> Speichern
       </button>
     </form>
   </div>

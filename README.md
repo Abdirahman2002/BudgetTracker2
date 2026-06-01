@@ -403,6 +403,16 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Referenz:** ER-Diagramm der Datenstruktur in `doc/architecture.mermaid`; Screenshot „zwei Konten sehen getrennte Daten" in Kap. _[x.y]_.
 - **Aus Evaluation abgeleitet?:** Nein — strukturelle Erweiterung, die direkt aus der Einführung der Benutzerkonten (#6) folgt.
 
+### 4.4 Mobiles Layout & Navigation (Issue #23)
+- **Beschreibung & Nutzen:** Der Prototyp hatte eine reine Desktop-Navigation mit englischen Titeln und Text-Buttons. Diese Erweiterung macht die Oberfläche **handytauglich und einheitlich**: eine Navigationsleiste, die den aktiven Menüpunkt markiert, auf schmalen Bildschirmen nur Icons zeigt, dazu eine schlanke Design-Schicht über Bootstrap und durchgängig deutsche Beschriftungen. Nutzen: bessere Bedienbarkeit auf dem Handy und ein ruhigeres, konsistentes Erscheinungsbild.
+- **Wo umgesetzt:**
+  - **Navigation:** `src/routes/+layout.svelte` — aktiver Menüpunkt via `class:active` / `aria-current` (über `$app/state`, `page.url.pathname`), Labels auf dem Handy ausgeblendet (`d-none d-md-inline`), klebende Kopfleiste (`sticky-top`), Logout-Button mit E-Mail.
+  - **Design-Schicht:** neue `static/theme.css` (weiche Karten, runde Buttons, Fokus-Ring) plus Inter-Font, eingebunden in `src/app.html`.
+  - **Komponente:** `src/lib/components/DeleteButton.svelte` vom Text- zum Icon-Button (platzsparend auf dem Handy).
+  - **Texte:** englische Titel → deutsch (Übersicht, Ausgabe erfassen, Verlauf, Kategorien …) in den Seiten unter `src/routes/`.
+- **Referenz:** Screenshots „Desktop- vs. Handy-Ansicht" in Kap. _[x.y]_.
+- **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester die Bedienung auf dem Handy bemängelt haben, hier auf das Evaluations-Issue verweisen]_
+
 ## 5. Projektorganisation [Optional]
 Beispiele:
 - **Repository & Struktur:** _[Link; kurze Strukturübersicht]_  

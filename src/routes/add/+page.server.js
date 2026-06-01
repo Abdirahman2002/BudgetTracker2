@@ -1,13 +1,13 @@
 import db from "$lib/db.js";
 
-export async function load() {
+export async function load({ locals }) {
   return {
-    categories: await db.getCategories(),
+    categories: await db.getCategories(locals.user._id),
   };
 }
 
 export const actions = {
-  async create({ request }) {
+  async create({ request, locals }) {
     const data = await request.formData();
     const amount = Number(data.get("amount"));
     const categoryId = data.get("categoryId");
@@ -25,7 +25,7 @@ export const actions = {
       return { error: "Bitte ein Datum auswählen." };
     }
 
-    await db.createTransaction({ amount, categoryId, date, note });
+    await db.createTransaction(locals.user._id, { amount, categoryId, date, note });
     return { success: true };
   },
 };

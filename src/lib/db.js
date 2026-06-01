@@ -3,90 +3,89 @@ import { DB_URI } from "$env/static/private";
 
 const client = new MongoClient(DB_URI);
 await client.connect();
-const db = client.db("BudgetTrackerDB");
+const db = client.db("BudgetTrackDB");
+
+const users = db.collection("users");
+const categories = db.collection("categories");
+const transactions = db.collection("transactions");
 
 //////////////////////////////////////////
-// Categories
+// Users
 //////////////////////////////////////////
 
-async function getCategories() {
-  let categories = [];
-  try {
-    const collection = db.collection("categories");
-    categories = await collection.find({}).toArray();
-    categories.forEach(function (c) {
-      c._id = c._id.toString();
-    });
-  } catch (error) {
-    console.log(error);
-  }
-  return categories;
+async function getUserByEmail(email) {
+  const u = await users.findOne({ email: email.toLowerCase() });
+  if (u) u._id = u._id.toString();
+  return u;
 }
 
-async function createCategory(category) {
-  try {
-    const collection = db.collection("categories");
-    const result = await collection.insertOne(category);
-    return result.insertedId.toString();
-  } catch (error) {
-    console.log(error);
-  }
-  return null;
+async function getUserById(id) {
+  const u = await users.findOne({ _id: new ObjectId(id) });
+  if (u) u._id = u._id.toString();
+  return u;
 }
 
-async function deleteCategory(id) {
-  try {
-    // Auch alle Transaktionen dieser Kategorie löschen
-    await db.collection("transactions").deleteMany({ categoryId: id });
-    await db.collection("categories").deleteOne({ _id: new ObjectId(id) });
-    return id;
-  } catch (error) {
-    console.log(error);
-  }
-  return null;
+async function createUser({ email, passwordHash }) {
+  const result = await users.insertOne({
+    email: email.toLowerCase(),
+    passwordHash,
+    createdAt: new Date(),
+  });
+  return result.insertedId.toString();
 }
 
 //////////////////////////////////////////
-// Transactions
+// Categories (pro User)
 //////////////////////////////////////////
 
-async function getTransactions() {
-  let transactions = [];
-  try {
-    const collection = db.collection("transactions");
-    transactions = await collection.find({}).sort({ date: -1 }).toArray();
-    transactions.forEach(function (t) {
-      t._id = t._id.toString();
-    });
-  } catch (error) {
-    console.log(error);
-  }
-  return transactions;
+async function getCategories(userId) {
+  const list = await categories.find({ userId }).sort({ name: 1 }).toArray();
+  list.forEach((c) => (c._id = c._id.toString()));
+  return list;
 }
 
-async function createTransaction(transaction) {
-  try {
-    const collection = db.collection("transactions");
-    const result = await collection.insertOne(transaction);
-    return result.insertedId.toString();
-  } catch (error) {
-    console.log(error);
-  }
-  return null;
+async function createCategory(userId, { name, icon }) {
+  const result = await categories.insertOne({ userId, name, icon });
+  return result.insertedId.toString();
 }
 
-async function deleteTransaction(id) {
-  try {
-    const collection = db.collection("transactions");
-    await collection.deleteOne({ _id: new ObjectId(id) });
-    return id;
-  } catch (error) {
-    console.log(error);
-  }
-  return null;
+async function deleteCategory(userId, id) {
+  // Kaskadierend: nur Transaktionen dieses Users mit dieser Kategorie löschen
+  await transactions.deleteMany({ userId, categoryId: id });
+  await categories.deleteOne({ _id: new ObjectId(id), userId });
+  return id;
+}
+
+//////////////////////////////////////////
+// Transactions (pro User)
+//////////////////////////////////////////
+
+async function getTransactions(userId) {
+  const list = await transactions.find({ userId }).sort({ date: -1 }).toArray();
+  list.forEach((t) => (t._id = t._id.toString()));
+  return list;
+}
+
+async function createTransaction(userId, { amount, categoryId, date, note }) {
+  await transactions.insertOne({
+    userId,
+    amount: Number(amount),
+    categoryId,
+    date,
+    note: note || "",
+  });
+}
+
+async function deleteTransaction(userId, id) {
+  await transactions.deleteOne({ _id: new ObjectId(id), userId });
+  return id;
 }
 
 export default {
+
+  getUserByEmail,
+  getUserById,
+  createUser,
   getCategories,
   createCategory,
   deleteCategory,

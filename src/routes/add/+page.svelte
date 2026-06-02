@@ -1,5 +1,11 @@
 <script>
   let { data, form } = $props();
+
+  // „Heute"-Button füllt das Datumsfeld auf den heutigen Tag.
+  let dateValue = $state(new Date().toISOString().slice(0, 10));
+  function setToday() {
+    dateValue = new Date().toISOString().slice(0, 10);
+  }
 </script>
 
 <a href="/" class="btn btn-outline-secondary btn-sm mb-3">
@@ -34,7 +40,12 @@
       </div>
       <div class="mb-3">
         <label for="date" class="form-label">Datum</label>
-        <input id="date" name="date" class="form-control" type="date" required />
+        <div class="input-group">
+          <input id="date" name="date" class="form-control" type="date" bind:value={dateValue} required />
+          <button type="button" class="btn btn-outline-secondary" onclick={setToday}>
+            <i class="bi bi-calendar-event"></i> Heute
+          </button>
+        </div>
       </div>
       <div class="mb-3">
         <label for="note" class="form-label">Notiz</label>

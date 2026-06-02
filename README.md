@@ -430,6 +430,26 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Referenz:** Screenshot des Icon-Pickers in Kap. _[x.y]_.
 - **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester die Klassennamen-Eingabe als umständlich empfanden, auf das Evaluations-Issue verweisen]_
 
+### 4.7 Dashboard mit Tortendiagramm (Issues #10 & #25)
+- **Beschreibung & Nutzen:** Die Startseite zeigt für den gewählten Monat Kennzahlen (Ausgegeben, Anzahl Transaktionen, Anzahl Kategorien über Budget), ein **Tortendiagramm** der Ausgabenverteilung und den Budget-Status pro Kategorie. Der Monat ist über ein Dropdown wählbar. Nutzen: Statt einer reinen Liste bekommen Nutzer einen schnellen visuellen Überblick, wohin das Geld fliesst.
+- **Wo umgesetzt:**
+  - **Komponente (#25):** neue `src/lib/components/PieChart.svelte` — gefülltes Tortendiagramm als Inline-SVG (Kreissektoren per Geometrie berechnet, keine externe Library) inkl. Legende.
+  - **Frontend (#10):** `src/routes/+page.svelte` — KPI-Karten, Monatsauswahl, Einbindung von `PieChart` und Budget-Status-Liste.
+  - **Backend (#10):** `src/routes/+page.server.js` — lädt Monatsauswertung und Monatsliste, berechnet Summen und „über Budget"-Anzahl.
+  - **Datenbank (#10):** `src/lib/db.js` — `getMonthlySummary(userId, month)` (Summe + Anzahl pro Kategorie) und `getUsedMonths(userId)` (Monate mit Transaktionen).
+- **Referenz:** Screenshot des Dashboards in Kap. _[x.y]_.
+- **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester einen visuellen Überblick gewünscht haben, auf das Evaluations-Issue verweisen]_
+
+### 4.8 Budget pro Kategorie mit Fortschrittsbalken (Issues #11 & #26)
+- **Beschreibung & Nutzen:** Jede Kategorie kann ein optionales **Monats-Budget** bekommen. Die Auslastung wird mit einem farbigen Fortschrittsbalken dargestellt (grün → gelb ab 80 % → rot ab 100 %), und das Dashboard zählt, wie viele Kategorien über ihrem Budget liegen. Nutzen: Nutzer sehen auf einen Blick, ob sie ihre selbst gesetzten Grenzen einhalten.
+- **Wo umgesetzt:**
+  - **Komponente (#26):** neue `src/lib/components/BudgetProgress.svelte` — Fortschrittsbalken mit Farbwarnung und Hinweis bei Überschreitung.
+  - **Frontend (#11):** `src/routes/categories/+page.svelte` — optionales Budget-Feld im Formular, Budget-Anzeige in der Kategorienliste; Einbindung von `BudgetProgress` im Budget-Status des Dashboards.
+  - **Backend (#11):** `src/routes/categories/+page.server.js` — liest `monthlyBudget` aus dem Formular und reicht es weiter.
+  - **Datenbank (#11):** `src/lib/db.js` — `createCategory` speichert `monthlyBudget` (oder `null`).
+- **Referenz:** Screenshot der Budget-Balken (Dashboard/Kategorien) in Kap. _[x.y]_.
+- **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Budget-Kontrolle ein Testwunsch war, auf das Evaluations-Issue verweisen]_
+
 ## 5. Projektorganisation [Optional]
 Beispiele:
 - **Repository & Struktur:** _[Link; kurze Strukturübersicht]_  

@@ -11,16 +11,17 @@ export const actions = {
     const data = await request.formData();
     const name = (data.get("name") || "").trim();
     const icon = (data.get("icon") || "").trim();
+    const monthlyBudget = data.get("monthlyBudget");
 
     // Server-Validierung
     if (!name) {
       return { error: "Bitte einen Namen eingeben." };
     }
     if (!icon) {
-      return { error: "Bitte einen Icon-Namen eingeben (z. B. apple, bag, train-front)." };
+      return { error: "Bitte ein Icon wählen." };
     }
 
-    await db.createCategory(locals.user._id, { name, icon });
+    await db.createCategory(locals.user._id, { name, icon, monthlyBudget });
     return { success: true };
   },
   async delete({ request, locals }) {

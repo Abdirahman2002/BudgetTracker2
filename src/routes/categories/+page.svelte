@@ -23,8 +23,13 @@
 {:else}
   <ul class="list-group mb-5">
     {#each data.categories as c}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <CategoryBadge category={c} />
+      <li class="list-group-item d-flex justify-content-between align-items-center gap-2">
+        <div class="text-truncate">
+          <CategoryBadge category={c} />
+          {#if c.monthlyBudget}
+            <small class="text-muted ms-2">Budget: {Number(c.monthlyBudget).toFixed(2)} CHF</small>
+          {/if}
+        </div>
         <DeleteButton
           id={c._id}
           confirmText="Kategorie {c.name} wirklich löschen? Alle zugehörigen Transaktionen werden ebenfalls entfernt."
@@ -47,6 +52,11 @@
       <div class="mb-3">
         <span class="form-label d-block">Icon</span>
         <IconPicker bind:value={selectedIcon} />
+      </div>
+      <div class="mb-3">
+        <label for="monthlyBudget" class="form-label">Monats-Budget (optional, CHF)</label>
+        <input id="monthlyBudget" name="monthlyBudget" class="form-control" type="number"
+               step="0.01" min="0" placeholder="z. B. 200" />
       </div>
       <button type="submit" class="btn btn-primary" disabled={!selectedIcon}>
         <i class="bi bi-plus-lg"></i> Kategorie hinzufügen

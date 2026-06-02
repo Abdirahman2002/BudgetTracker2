@@ -35,7 +35,7 @@ async function createUser({ email, passwordHash }) {
 }
 
 //////////////////////////////////////////
-// Categories (pro User)
+// Categories (pro User, mit optionalem Budget)
 //////////////////////////////////////////
 
 async function getCategories(userId) {
@@ -44,8 +44,13 @@ async function getCategories(userId) {
   return list;
 }
 
-async function createCategory(userId, { name, icon }) {
-  const result = await categories.insertOne({ userId, name, icon });
+async function createCategory(userId, { name, icon, monthlyBudget }) {
+  const result = await categories.insertOne({
+    userId,
+    name,
+    icon,
+    monthlyBudget: monthlyBudget ? Number(monthlyBudget) : null,
+  });
   return result.insertedId.toString();
 }
 
@@ -81,15 +86,54 @@ async function deleteTransaction(userId, id) {
   return id;
 }
 
-export default {
+//////////////////////////////////////////
+// Auswertungen
+//////////////////////////////////////////
 
+// Summe + Anzahl pro Kategorie für einen Monat ("YYYY-MM").
+async function getMonthlySummary(userId, month) {
+  const list = await transactions.find({ userId }).toArray();
+
+  const summary = {}; // { categoryId: { _id, amount, count } }
+  for (const t of list) {
+    if (!t.date.startsWith(month)) continue;
+    if (!summary[t.categoryId]) {
+      summary[t.categoryId] = { _id: t.categoryId, amount: 0, count: 0 };
+    }
+    summary[t.categoryId].amount += t.amount;
+    summary[t.categoryId].count += 1;
+  }
+  return Object.values(summary);
+}
+
+// Alle Monate ("YYYY-MM") mit Transaktionen — neueste zuerst.
+async function getUsedMonths(userId) {
+  const list = await transactions.find({ userId }).toArray();
+
+  const months = [];
+  for (const t of list) {
+    const month = t.date.slice(0, 7);
+    if (!months.includes(month)) months.push(month);
+  }
+  months.sort();
+  months.reverse();
+  return months;
+}
+
+export default {
+  // Users
   getUserByEmail,
   getUserById,
   createUser,
+  // Categories
   getCategories,
   createCategory,
   deleteCategory,
+  // Transactions
   getTransactions,
   createTransaction,
   deleteTransaction,
+  // Auswertungen
+  getMonthlySummary,
+  getUsedMonths,
 };

@@ -65,12 +65,6 @@ async function deleteCategory(userId, id) {
 // Transactions (pro User)
 //////////////////////////////////////////
 
-async function getTransactions(userId) {
-  const list = await transactions.find({ userId }).sort({ date: -1 }).toArray();
-  list.forEach((t) => (t._id = t._id.toString()));
-  return list;
-}
-
 async function createTransaction(userId, { amount, categoryId, date, note }) {
   await transactions.insertOne({
     userId,
@@ -84,6 +78,34 @@ async function createTransaction(userId, { amount, categoryId, date, note }) {
 async function deleteTransaction(userId, id) {
   await transactions.deleteOne({ _id: new ObjectId(id), userId });
   return id;
+}
+
+// Transaktionen mit optionalem Filter: Kategorie, Zeitraum, Betragsbereich, Notiz-Suche.
+async function findTransactions(userId, { categoryId, from, to, minAmount, maxAmount, search } = {}) {
+  const query = { userId };
+
+  if (categoryId) query.categoryId = categoryId;
+
+  // Zeitraum
+  if (from || to) {
+    query.date = {};
+    if (from) query.date.$gte = from;
+    if (to) query.date.$lte = to;
+  }
+
+  // Betragsbereich.
+  if (minAmount || maxAmount) {
+    query.amount = {};
+    if (minAmount) query.amount.$gte = Number(minAmount);
+    if (maxAmount) query.amount.$lte = Number(maxAmount);
+  }
+
+  // Textsuche in der Notiz
+  if (search) query.note = { $regex: search, $options: "i" };
+
+  const list = await transactions.find(query).sort({ date: -1 }).toArray();
+  list.forEach((t) => (t._id = t._id.toString()));
+  return list;
 }
 
 //////////////////////////////////////////
@@ -130,9 +152,9 @@ export default {
   createCategory,
   deleteCategory,
   // Transactions
-  getTransactions,
   createTransaction,
   deleteTransaction,
+  findTransactions,
   // Auswertungen
   getMonthlySummary,
   getUsedMonths,

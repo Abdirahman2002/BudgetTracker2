@@ -413,6 +413,23 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Referenz:** Screenshots „Desktop- vs. Handy-Ansicht" in Kap. _[x.y]_.
 - **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester die Bedienung auf dem Handy bemängelt haben, hier auf das Evaluations-Issue verweisen]_
 
+### 4.5 „Heute"-Button beim Datum (Issue #8)
+- **Beschreibung & Nutzen:** Beim Erfassen einer Ausgabe lässt sich das Datumsfeld mit einem Klick auf „Heute" auf den aktuellen Tag setzen. Nutzen: Der häufigste Fall (Ausgabe von heute) ist ein einziger Klick statt manueller Datumseingabe — schnelleres, fehlerärmeres Erfassen. Manuelles Ändern bleibt jederzeit möglich.
+- **Wo umgesetzt:**
+  - **Frontend:** `src/routes/add/+page.svelte` — ein `$state`-Datumswert, an das `<input type="date">` gebunden (`bind:value`), plus ein „Heute"-Button (`input-group`) mit `setToday()`.
+  - **Backend/Datenbank:** keine Änderung — das Datum wird wie bisher über die bestehende `create`-Action gespeichert.
+- **Referenz:** Screenshot des Erfassen-Formulars in Kap. _[x.y]_.
+- **Aus Evaluation abgeleitet?:** _[Ja/Nein — klassischer Quick Win; falls aus dem Testing, auf das Evaluations-Issue verweisen]_
+
+### 4.6 Icon-Auswahl mit Vorschau (Issues #9 & #24)
+- **Beschreibung & Nutzen:** Beim Anlegen einer Kategorie wird das Icon nicht mehr als Bootstrap-Klassenname getippt, sondern aus einer **kuratierten Galerie** angeklickt — mit Live-Vorschau und einem Freitext-Fallback für seltene Icons. Nutzen: Nutzer müssen keine Icon-Namen kennen, Tippfehler entfallen, und das gewählte Icon ist sofort sichtbar. „Hinzufügen" ist erst möglich, wenn ein Icon gewählt wurde.
+- **Wo umgesetzt:**
+  - **Komponente (#24):** neue, wiederverwendbare `src/lib/components/IconPicker.svelte` — kuratierte Icon-Buttons, verstecktes `<input name="icon">` (zweiweg-gebunden via `$bindable`), Freitextfeld + Live-Vorschau.
+  - **Frontend (#9):** `src/routes/categories/+page.svelte` — das frühere Freitext-Icon-Feld durch `<IconPicker>` ersetzt, Submit `disabled`, bis ein Icon gewählt ist.
+  - **Backend/Datenbank:** unverändert — der Icon-Name wird über die bestehende `create`-Action gespeichert.
+- **Referenz:** Screenshot des Icon-Pickers in Kap. _[x.y]_.
+- **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester die Klassennamen-Eingabe als umständlich empfanden, auf das Evaluations-Issue verweisen]_
+
 ## 5. Projektorganisation [Optional]
 Beispiele:
 - **Repository & Struktur:** _[Link; kurze Strukturübersicht]_  

@@ -1,8 +1,12 @@
 <script>
   import CategoryBadge from '$lib/components/CategoryBadge.svelte';
   import DeleteButton from '$lib/components/DeleteButton.svelte';
+  import IconPicker from '$lib/components/IconPicker.svelte';
 
   let { data, form } = $props();
+
+  // Icon-Picker statt freier Klassennamen-Eingabe.
+  let selectedIcon = $state("");
 </script>
 
 <h1 class="mb-4">Kategorien</h1>
@@ -41,13 +45,10 @@
         <input id="name" name="name" class="form-control" type="text" required />
       </div>
       <div class="mb-3">
-        <label for="icon" class="form-label">Icon (Bootstrap-Icon-Name)</label>
-        <input id="icon" name="icon" class="form-control" type="text" placeholder="z. B. apple, bag, train-front" required />
-        <div class="form-text">
-          Alle Icons unter <a href="https://icons.getbootstrap.com/" target="_blank" rel="noopener">icons.getbootstrap.com</a>
-        </div>
+        <span class="form-label d-block">Icon</span>
+        <IconPicker bind:value={selectedIcon} />
       </div>
-      <button type="submit" class="btn btn-primary">
+      <button type="submit" class="btn btn-primary" disabled={!selectedIcon}>
         <i class="bi bi-plus-lg"></i> Kategorie hinzufügen
       </button>
     </form>

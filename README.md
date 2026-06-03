@@ -459,6 +459,15 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Referenz:** Screenshot des Bearbeiten-Formulars in Kap. _[x.y]_.
 - **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester das Korrigieren von Einträgen vermisst haben, auf das Evaluations-Issue verweisen]_
 
+### 4.10 Kategorie bearbeiten (Issue #14)
+- **Beschreibung & Nutzen:** Bestehende Kategorien lassen sich nachträglich anpassen — Name, Icon (über den IconPicker) und Monats-Budget — ohne sie löschen und neu anlegen zu müssen. Nutzen: Kategorien können mit der Zeit umbenannt oder mit einem Budget versehen werden, ohne die zugehörigen Transaktionen zu verlieren.
+- **Wo umgesetzt:**
+  - **Frontend:** eigene Bearbeiten-Seite `src/routes/categories/[id]/+page.svelte` mit vorausgefülltem Formular (inkl. IconPicker und Budget-Feld); ein Stift-Link pro Kategorie in `src/routes/categories/+page.svelte` führt dorthin.
+  - **Backend:** `src/routes/categories/[id]/+page.server.js` — `load` holt die Kategorie, die Form Action `?/update` speichert die Änderungen und leitet zurück auf `/categories`.
+  - **Datenbank:** `getCategory(userId, id)` und `updateCategory(userId, id, { … })` in `src/lib/db.js` — beide mit `userId` im Filter, sodass nur eigene Kategorien geändert werden können.
+- **Referenz:** Screenshot des Bearbeiten-Formulars in Kap. _[x.y]_.
+- **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester das nachträgliche Anpassen von Kategorien vermisst haben, auf das Evaluations-Issue verweisen]_
+
 ## 5. Projektorganisation [Optional]
 Beispiele:
 - **Repository & Struktur:** _[Link; kurze Strukturübersicht]_  

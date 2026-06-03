@@ -5,7 +5,7 @@
 
   let { data, form } = $props();
 
-
+  // Wenn gefiltert wurde, das Ergebnis der Form Action zeigen — sonst alle.
   const transactions = $derived(form?.transactions ?? data.transactions);
   const filters = $derived(
     form?.filters ?? { categoryId: "", from: "", to: "", minAmount: "", maxAmount: "", search: "" }
@@ -23,6 +23,7 @@
   </h1>
   <a href="/add" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Neu</a>
 </div>
+
 
 <div class="card border-0 shadow-sm mb-4">
   <div class="card-body">
@@ -93,6 +94,10 @@
               <span class="fw-semibold text-danger">
                 <Money amount={tx.amount} negative />
               </span>
+              <a href="/history/{tx._id}" class="btn btn-sm btn-outline-primary"
+                 aria-label="Transaktion bearbeiten" title="Bearbeiten">
+                <i class="bi bi-pencil"></i>
+              </a>
               <DeleteButton id={tx._id} confirmText="Diese Transaktion wirklich löschen?" />
             </div>
           </div>

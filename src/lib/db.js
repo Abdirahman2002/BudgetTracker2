@@ -65,6 +65,12 @@ async function deleteCategory(userId, id) {
 // Transactions (pro User)
 //////////////////////////////////////////
 
+async function getTransaction(userId, id) {
+  const t = await transactions.findOne({ _id: new ObjectId(id), userId });
+  if (t) t._id = t._id.toString();
+  return t;
+}
+
 async function createTransaction(userId, { amount, categoryId, date, note }) {
   await transactions.insertOne({
     userId,
@@ -73,6 +79,20 @@ async function createTransaction(userId, { amount, categoryId, date, note }) {
     date,
     note: note || "",
   });
+}
+
+async function updateTransaction(userId, id, { amount, categoryId, date, note }) {
+  await transactions.updateOne(
+    { _id: new ObjectId(id), userId },
+    {
+      $set: {
+        amount: Number(amount),
+        categoryId,
+        date,
+        note: note || "",
+      },
+    }
+  );
 }
 
 async function deleteTransaction(userId, id) {
@@ -152,7 +172,9 @@ export default {
   createCategory,
   deleteCategory,
   // Transactions
+  getTransaction,
   createTransaction,
+  updateTransaction,
   deleteTransaction,
   findTransactions,
   // Auswertungen

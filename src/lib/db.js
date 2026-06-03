@@ -44,6 +44,12 @@ async function getCategories(userId) {
   return list;
 }
 
+async function getCategory(userId, id) {
+  const c = await categories.findOne({ _id: new ObjectId(id), userId });
+  if (c) c._id = c._id.toString();
+  return c;
+}
+
 async function createCategory(userId, { name, icon, monthlyBudget }) {
   const result = await categories.insertOne({
     userId,
@@ -52,6 +58,19 @@ async function createCategory(userId, { name, icon, monthlyBudget }) {
     monthlyBudget: monthlyBudget ? Number(monthlyBudget) : null,
   });
   return result.insertedId.toString();
+}
+
+async function updateCategory(userId, id, { name, icon, monthlyBudget }) {
+  await categories.updateOne(
+    { _id: new ObjectId(id), userId },
+    {
+      $set: {
+        name,
+        icon,
+        monthlyBudget: monthlyBudget ? Number(monthlyBudget) : null,
+      },
+    }
+  );
 }
 
 async function deleteCategory(userId, id) {
@@ -169,7 +188,9 @@ export default {
   createUser,
   // Categories
   getCategories,
+  getCategory,
   createCategory,
+  updateCategory,
   deleteCategory,
   // Transactions
   getTransaction,

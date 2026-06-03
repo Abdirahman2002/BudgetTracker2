@@ -30,10 +30,16 @@
             <small class="text-muted ms-2">Budget: {Number(c.monthlyBudget).toFixed(2)} CHF</small>
           {/if}
         </div>
-        <DeleteButton
-          id={c._id}
-          confirmText="Kategorie {c.name} wirklich löschen? Alle zugehörigen Transaktionen werden ebenfalls entfernt."
-        />
+        <div class="d-flex gap-2 flex-shrink-0">
+          <a href="/categories/{c._id}" class="btn btn-sm btn-outline-primary"
+             aria-label="Kategorie bearbeiten" title="Bearbeiten">
+            <i class="bi bi-pencil"></i>
+          </a>
+          <DeleteButton
+            id={c._id}
+            confirmText="Kategorie {c.name} wirklich löschen? Alle zugehörigen Transaktionen werden ebenfalls entfernt."
+          />
+        </div>
       </li>
     {/each}
   </ul>

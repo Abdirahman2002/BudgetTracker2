@@ -450,6 +450,15 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Referenz:** Screenshot der Budget-Balken (Dashboard/Kategorien) in Kap. _[x.y]_.
 - **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Budget-Kontrolle ein Testwunsch war, auf das Evaluations-Issue verweisen]_
 
+### 4.9 Transaktion bearbeiten (Issue #13)
+- **Beschreibung & Nutzen:** Bereits erfasste Transaktionen lassen sich nachträglich korrigieren (Betrag, Kategorie, Datum, Notiz), statt sie löschen und neu anlegen zu müssen. Nutzen: Tippfehler oder falsch zugeordnete Kategorien sind mit wenigen Klicks behoben.
+- **Wo umgesetzt:**
+  - **Frontend:** eigene Bearbeiten-Seite `src/routes/history/[id]/+page.svelte` mit vorausgefülltem Formular; ein Stift-Link pro Eintrag in `src/routes/history/+page.svelte` führt dorthin.
+  - **Backend:** `src/routes/history/[id]/+page.server.js` — `load` holt die Transaktion, die Form Action `?/update` speichert die Änderungen und leitet zurück auf `/history`.
+  - **Datenbank:** `getTransaction(userId, id)` und `updateTransaction(userId, id, { … })` in `src/lib/db.js` — beide mit `userId` im Filter, sodass nur eigene Einträge geändert werden können.
+- **Referenz:** Screenshot des Bearbeiten-Formulars in Kap. _[x.y]_.
+- **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester das Korrigieren von Einträgen vermisst haben, auf das Evaluations-Issue verweisen]_
+
 ## 5. Projektorganisation [Optional]
 Beispiele:
 - **Repository & Struktur:** _[Link; kurze Strukturübersicht]_  

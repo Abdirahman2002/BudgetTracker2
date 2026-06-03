@@ -375,14 +375,14 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 
 > Das folgende **Beispiel** wurde bewusst kurz gehalten. Erweiterungen dürfen auch ausführlicher beschrieben werden.
 
-### 4.1 Tabelle nach Kategorien filtern
-- **Beschreibung & Nutzen:** Tabelle X kann nach Kategorie gefiltert werden, weil User typischerweise nur an einer bestimmten Kategorie interessiert sind.  
-- **Wo umgesetzt:** 
-  - **Frontend:** Tabelle mit Dropdown in Datei ...
-  - **Backend:** Form Action ... in Datei ...
-  - **Datenbank:** MongoDB-Query in Datei ...
-- **Referenz:** Screenshot in Kap. x.y
-- **Aus Evaluation abgeleitet?:** Ja, Issue x.y
+### 4.1 Verlauf filtern – Kategorie, Zeitraum, Betrag & Notiz (Issue #12)
+- **Beschreibung & Nutzen:** Die Transaktionsliste im Verlauf lässt sich nach **Kategorie**, **Zeitraum** (von/bis), **Betragsbereich** (min/max CHF) und **Notiz-Text** filtern. Nutzen: Bei vielen Einträgen finden Nutzer gezielt, was sie suchen (z. B. „alle Lebensmittel-Ausgaben im Mai", „alle über 50 CHF" oder Einträge mit „Coop"), statt die ganze Liste zu durchsuchen.
+- **Wo umgesetzt:**
+  - **Frontend:** `src/routes/history/+page.svelte` — Filterformular mit Kategorie-Dropdown, Von/Bis-Datum, Min/Max-Betrag und Notiz-Suchfeld; zeigt entweder das Filterergebnis (`form`) oder die volle Liste (`data`).
+  - **Backend:** Form Action `?/filter` in `src/routes/history/+page.server.js` — liest die Felder und ruft die Datenbank-Query auf.
+  - **Datenbank:** `findTransactions(userId, { categoryId, from, to, minAmount, maxAmount, search })` in `src/lib/db.js` — baut eine MongoDB-Query (`$gte`/`$lte` für Zeitraum und Betrag, `$regex` für die Notiz-Suche).
+- **Referenz:** Screenshot des Filters in Kap. _[x.y]_.
+- **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester das Wiederfinden von Einträgen bemängelt haben, auf das Evaluations-Issue verweisen]_
 
 ### 4.2 Benutzerkonten: Registrierung, Login & Logout (Issue #6)
 - **Beschreibung & Nutzen:** Der Prototyp war eine **Single-User-App** — alle Daten lagen ungeschützt in gemeinsamen Collections. Diese Erweiterung führt **echte Benutzerkonten** mit Registrierung, Login und Logout ein. Nutzen: Die App wird mehrbenutzerfähig und schützt persönliche Finanzdaten hinter einer Authentifizierung. Abgrenzung zum Mindestumfang: Der Übungsumfang verlangt nur Erfassen/Bearbeiten von Daten ohne Authentifizierung; Benutzerkonten gehen klar darüber hinaus.

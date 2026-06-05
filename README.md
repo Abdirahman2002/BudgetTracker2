@@ -468,6 +468,15 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Referenz:** Screenshot des Bearbeiten-Formulars in Kap. _[x.y]_.
 - **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester das nachträgliche Anpassen von Kategorien vermisst haben, auf das Evaluations-Issue verweisen]_
 
+### 4.11 Wiederkehrende Ausgaben / Fixkosten (Issue #15)
+- **Beschreibung & Nutzen:** Monatliche Fixkosten (z. B. Miete, ÖV-Abo, Krankenkasse) lassen sich einmal hinterlegen — mit Betrag, Kategorie, Tag im Monat und Notiz — und werden danach **automatisch jeden Monat einmal** als Transaktion erzeugt. Nutzen: Wiederkehrende Beträge müssen nicht jeden Monat von Hand erfasst werden; die Auswertung bleibt trotzdem vollständig.
+- **Wo umgesetzt:**
+  - **Frontend:** eigene Seite `src/routes/recurring/+page.svelte` (Liste + Anlegen/Löschen) und ein Navigationspunkt „Wiederkehrend" in `src/routes/+layout.svelte`.
+  - **Backend:** `src/routes/recurring/+page.server.js` (Form Actions `?/create` und `?/delete`); der Generator wird bei jedem Laden in `src/routes/+layout.server.js` aufgerufen.
+  - **Datenbank:** neue Collection `recurringTransactions` mit `getRecurring`, `createRecurring`, `deleteRecurring` und `generateRecurringForCurrentMonth` in `src/lib/db.js`. Die Erzeugung ist **idempotent** (Feld `lastGeneratedMonth`), sodass mehrfaches Laden im selben Monat keine Doppeleinträge erzeugt.
+- **Referenz:** Screenshot der Fixkosten-Seite in Kap. _[x.y]_.
+- **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester das wiederholte Erfassen von Fixkosten als mühsam empfanden, auf das Evaluations-Issue verweisen]_
+
 ## 5. Projektorganisation [Optional]
 Beispiele:
 - **Repository & Struktur:** _[Link; kurze Strukturübersicht]_  

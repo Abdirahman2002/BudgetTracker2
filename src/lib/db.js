@@ -8,6 +8,7 @@ const db = client.db("BudgetTrackDB");
 const users = db.collection("users");
 const categories = db.collection("categories");
 const transactions = db.collection("transactions");
+const recurring = db.collection("recurringTransactions");
 
 //////////////////////////////////////////
 // Users
@@ -181,6 +182,60 @@ async function getUsedMonths(userId) {
   return months;
 }
 
+//////////////////////////////////////////
+// Wiederkehrende Transaktionen (Fixkosten)
+//////////////////////////////////////////
+
+async function getRecurring(userId) {
+  const list = await recurring.find({ userId }).toArray();
+  list.forEach((r) => (r._id = r._id.toString()));
+  return list;
+}
+
+async function createRecurring(userId, { amount, categoryId, note, dayOfMonth }) {
+  await recurring.insertOne({
+    userId,
+    amount: Number(amount),
+    categoryId,
+    note: note || "",
+    dayOfMonth: Number(dayOfMonth),
+    active: true,
+    lastGeneratedMonth: null,
+  });
+}
+
+async function deleteRecurring(userId, id) {
+  await recurring.deleteOne({ _id: new ObjectId(id), userId });
+}
+
+// Erzeugt für den aktuellen Monat alle ausstehenden wiederkehrenden Transaktionen.
+// Idempotent dank lastGeneratedMonth — mehrfaches Aufrufen erzeugt nichts doppelt.
+async function generateRecurringForCurrentMonth(userId) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const currentMonth = `${year}-${month}`;
+
+  const items = await recurring.find({ userId, active: true }).toArray();
+
+  for (const r of items) {
+    if (r.lastGeneratedMonth === currentMonth) continue; // schon erzeugt → skip
+
+    const day = String(Math.min(r.dayOfMonth, 28)).padStart(2, "0");
+    await transactions.insertOne({
+      userId,
+      amount: r.amount,
+      categoryId: r.categoryId,
+      date: `${currentMonth}-${day}`,
+      note: r.note || "(wiederkehrend)",
+    });
+    await recurring.updateOne(
+      { _id: r._id },
+      { $set: { lastGeneratedMonth: currentMonth } }
+    );
+  }
+}
+
 export default {
   // Users
   getUserByEmail,
@@ -201,4 +256,9 @@ export default {
   // Auswertungen
   getMonthlySummary,
   getUsedMonths,
+  // Wiederkehrend
+  getRecurring,
+  createRecurring,
+  deleteRecurring,
+  generateRecurringForCurrentMonth,
 };

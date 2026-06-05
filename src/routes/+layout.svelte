@@ -7,7 +7,8 @@
   // Navigationspunkte zentral – damit der aktive Zustand sauber markiert wird.
   const links = [
     { href: '/history',    icon: 'clock-history', label: 'Verlauf' },
-    { href: '/categories', icon: 'folder',        label: 'Kategorien' }
+    { href: '/categories', icon: 'folder',        label: 'Kategorien' },
+    { href: '/recurring',  icon: 'arrow-repeat',  label: 'Wiederkehrend' }
   ];
 
   const path = $derived(page.url.pathname);

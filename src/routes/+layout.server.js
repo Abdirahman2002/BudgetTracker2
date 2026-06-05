@@ -1,8 +1,7 @@
 import { redirect } from "@sveltejs/kit";
+import db from "$lib/db.js";
 
-// Schützt alle Routen ausser /login und /register.
-// Wer nicht eingeloggt ist, wird umgeleitet; wer eingeloggt ist, wird von den
-// Auth-Seiten weggeleitet.
+// Schützt alle Routen ausser /login und /register und erzeugt fällige Fixkosten.
 export async function load({ locals, url }) {
   const isAuthRoute = url.pathname === "/login" || url.pathname === "/register";
 
@@ -12,6 +11,11 @@ export async function load({ locals, url }) {
 
   if (locals.user && isAuthRoute) {
     throw redirect(303, "/");
+  }
+
+  // Wiederkehrende Transaktionen für den aktuellen Monat erzeugen (idempotent).
+  if (locals.user) {
+    await db.generateRecurringForCurrentMonth(locals.user._id);
   }
 
   return { user: locals.user ?? null };

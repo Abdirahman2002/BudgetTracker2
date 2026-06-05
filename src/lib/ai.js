@@ -1,8 +1,3 @@
-//////////////////////////////////////////
-// KI-Anbindung (OpenAI). Liest aus einem Belegfoto Betrag, Datum, Händler
-// und schlägt eine passende Kategorie vor.
-// Schlüssel aus OPEN_AI_KEY; ohne Schlüssel -> "KI ist nicht konfiguriert".
-//////////////////////////////////////////
 
 import { env } from "$env/dynamic/private";
 
@@ -13,7 +8,7 @@ export function isConfigured() {
   return Boolean(env.OPEN_AI_KEY);
 }
 
-// Liest einen Beleg aus. Gibt { amount, date, merchant, category } zurück oder { error }.
+// Liest einen Beleg aus
 export async function readReceipt(imageDataUrl, categoryNames = []) {
   if (!imageDataUrl) {
     return { error: "Kein Bild übergeben." };

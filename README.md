@@ -486,6 +486,16 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Referenz:** Screenshot des Monatsvergleichs in Kap. _[x.y]_.
 - **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester einen Monatsvergleich gewünscht haben, auf das Evaluations-Issue verweisen]_
 
+### 4.13 Beleg-Scan mit KI / OCR (Issues #19–#22)
+- **Beschreibung & Nutzen:** Beim Erfassen kann ein Foto des Kassenbelegs hochgeladen werden. Eine KI (OpenAI) liest daraus **Betrag, Datum und Händler** aus, füllt die Formularfelder automatisch vor und schlägt anhand des Händlers eine passende **Kategorie** aus den eigenen Kategorien vor. Der Nutzer prüft und bestätigt die Werte vor dem Speichern. Nutzen: deutlich schnelleres, fehlerärmeres Erfassen — gerade unterwegs per Handy-Foto. Das Bild wird dabei **nur zum Auslesen** verwendet und **nicht gespeichert** (datensparsam, keine grossen Dokumente in der DB).
+- **Wo umgesetzt:**
+  - **Frontend (#19/#21/#22):** `src/routes/add/+page.svelte` — Datei-/Kamera-Feld mit Vorschau, „Beleg auslesen"-Button mit Lade-/Status-Anzeige; die erkannten Werte (Betrag, Datum, Notiz, Kategorie) werden an die Formularfelder gebunden und vorausgefüllt.
+  - **Backend (#20/#22):** Endpoint `POST /add/scan` (`src/routes/add/scan/+server.js`) — nimmt das Foto entgegen, ruft die KI auf und bildet den vorgeschlagenen Kategorienamen auf eine echte Kategorie-ID ab. Auth-Prüfung direkt im Endpoint (`locals.user`).
+  - **KI-Anbindung (#20/#22):** `src/lib/ai.js` — Aufruf von OpenAI (`gpt-4o-mini`, Bild-/Vision-fähig) mit JSON-Antwort. Schlüssel aus der Umgebungsvariable `OPEN_AI_KEY`; ohne Schlüssel meldet der Scan „KI ist nicht konfiguriert" und die App bleibt voll nutzbar.
+  - **Konfiguration:** `OPEN_AI_KEY` in `.env` (lokal) bzw. in den Netlify-Umgebungsvariablen (Deployment). Datenbank unverändert.
+- **Referenz:** Screenshot „Beleg scannen" inkl. ausgefülltem Formular in Kap. _[x.y]_; KI-Einsatz dokumentiert in Kap. 6 (KI-Deklaration).
+- **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester das manuelle Abtippen von Belegen als mühsam empfanden, auf das Evaluations-Issue verweisen]_
+
 ## 5. Projektorganisation [Optional]
 Beispiele:
 - **Repository & Struktur:** _[Link; kurze Strukturübersicht]_  

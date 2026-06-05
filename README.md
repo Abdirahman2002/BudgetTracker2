@@ -477,6 +477,15 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Referenz:** Screenshot der Fixkosten-Seite in Kap. _[x.y]_.
 - **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester das wiederholte Erfassen von Fixkosten als mühsam empfanden, auf das Evaluations-Issue verweisen]_
 
+### 4.12 Monatsvergleich (Issue #16)
+- **Beschreibung & Nutzen:** Zwei Monate lassen sich nebeneinander vergleichen — die Ausgaben pro Kategorie samt Differenz (rot = mehr, grün = weniger ausgegeben) und einer Total-Zeile. Standardmässig wird der Vormonat dem aktuellen Monat gegenübergestellt. Nutzen: Trends und Ausreisser werden auf einen Blick sichtbar („Wo habe ich diesen Monat mehr ausgegeben?").
+- **Wo umgesetzt:**
+  - **Frontend:** eigene Seite `src/routes/compare/+page.svelte` mit zwei Monats-Dropdowns und einer Vergleichstabelle (farbige Differenz pro Kategorie); Navigationspunkt „Vergleich" in `src/routes/+layout.svelte`.
+  - **Backend:** `src/routes/compare/+page.server.js` — lädt die Auswertung beider Monate, berechnet pro Kategorie die Differenz und die Totale.
+  - **Datenbank:** keine neue Funktion — wiederverwendet `getMonthlySummary(userId, month)` und `getUsedMonths(userId)` aus `src/lib/db.js`.
+- **Referenz:** Screenshot des Monatsvergleichs in Kap. _[x.y]_.
+- **Aus Evaluation abgeleitet?:** _[Ja/Nein — falls Tester einen Monatsvergleich gewünscht haben, auf das Evaluations-Issue verweisen]_
+
 ## 5. Projektorganisation [Optional]
 Beispiele:
 - **Repository & Struktur:** _[Link; kurze Strukturübersicht]_  

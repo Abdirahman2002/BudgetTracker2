@@ -374,6 +374,9 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
   - **Komponente:** `src/lib/components/DeleteButton.svelte` vom Text- zum Icon-Button (platzsparend auf dem Handy).
   - **Texte:** englische Titel → deutsch (Übersicht, Ausgabe erfassen, Verlauf, Kategorien …) in den Seiten unter `src/routes/`.
 - **Aus Evaluation abgeleitet?:** Nein — Umsetzung des ursprünglichen Mobile-first-Ziels (Kap. 3.3); im Usability-Test wurde die Handy-Bedienung nicht explizit bemängelt.
+**Referenz:**
+![Mobiles_Layout](/img/Projekt_Mobile1.jpeg)
+![Mobiles_Layout](img/Projekt_Mobile2.jpeg)
 
 ### 4.5 „Heute"-Button beim Datum (Issue #8)
 - **Beschreibung & Nutzen:** Beim Erfassen einer Ausgabe lässt sich das Datumsfeld mit einem Klick auf „Heute" auf den aktuellen Tag setzen. Nutzen: Der häufigste Fall (Ausgabe von heute) ist ein einziger Klick statt manueller Datumseingabe — schnelleres, fehlerärmeres Erfassen. Manuelles Ändern bleibt jederzeit möglich.

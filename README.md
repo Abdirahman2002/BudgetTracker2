@@ -302,11 +302,11 @@ Eine schlanke Web-App, die Studierenden den Überblick über ihre monatlichen Au
 
   | Tester | Profil | Was gefiel | Hauptkritik / Wünsche |
   |---|---|---|---|
-  | **T1** | 23 J., Wirtschaftsinformatik, on-Site | „Sehr einfach und selbsterklärend", clean, keine fancy Tools | „Heute"-Button beim Datum; Tages-Graph für Ausgaben; Fixkosten vs. variable Kosten |
-  | **T2** | 22 J., BWL, on-Site | „Sehr übersichtlich", einfaches Anlegen, klare Fehlerhinweise | Mehrere Artikel/Tag schneller erfassen; Detail-Drilldown pro Kategorie; Sortier-/Filteroption History; Icon-Dropdown |
-  | **T3** | 24 J., Informatik, on-Site | Logischer Aufbau, Validierung funktioniert | „Heute"-Shortcut; Bearbeiten statt Löschen+Neu; Diagramm auf Overview; Icon-Picker mit Vorschau |
-  | **T4** | 28 J., IT-Support, off-Site | Schlankes UI, kein Account nötig, schnell startklar | Filter/Suche History; wiederkehrende Transaktionen; Monatsvergleich + Budget-Limits; Foto-Beleg-Erfassung |
-  | **T5** | 31 J., Buchhaltung, off-Site | Klare Trennung der Bildschirme; Daten bleiben nach Reload | Icon-Auswahl unintuitiv; Jahresübersicht fehlt; Budget-Limit mit Warnung; automatische Quittungs-Erkennung |
+  | **T1** | 23 J. , on-Site | „Sehr einfach und selbsterklärend", clean, keine fancy Tools | „Heute"-Button beim Datum; Tages-Graph für Ausgaben; Fixkosten vs. variable Kosten |
+  | **T2** | 22 J., on-Site | „Sehr übersichtlich", einfaches Anlegen, klare Fehlerhinweise | Mehrere Artikel/Tag schneller erfassen; Detail-Drilldown pro Kategorie; Sortier-/Filteroption History; Icon-Dropdown |
+  | **T3** | 24 J., on-Site | Logischer Aufbau, Validierung funktioniert | „Heute"-Shortcut; Bearbeiten statt Löschen+Neu; Diagramm auf Overview; Icon-Picker mit Vorschau |
+  | **T4** | 28 J., off-Site | Schlankes UI, kein Account nötig, schnell startklar | Filter/Suche History; wiederkehrende Transaktionen; Monatsvergleich + Budget-Limits; Foto-Beleg-Erfassung |
+  | **T5** | 31 J., off-Site | Klare Trennung der Bildschirme; Daten bleiben nach Reload | Icon-Auswahl unintuitiv; Jahresübersicht fehlt; Budget-Limit mit Warnung; automatische Quittungs-Erkennung |
 
 - **Abgeleitete Verbesserungen:**
 
